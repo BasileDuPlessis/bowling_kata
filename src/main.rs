@@ -6,18 +6,18 @@ struct Game {
 }
 
 impl Game {
-    fn new() -> Game {
+    pub fn new() -> Game {
         Game {
             rolls: vec![0; 21],
             current_roll: 0,
         }
     }
-    fn roll(&mut self, pins: usize) {
+    pub fn roll(&mut self, pins: usize) {
         self.rolls[self.current_roll] = pins;
         self.current_roll += 1;
     }
 
-    fn score(&mut self) -> usize {
+    pub fn score(&mut self) -> usize {
         let mut score: usize = 0;
         let mut first_in_frame = 0;
 
@@ -56,6 +56,7 @@ impl Game {
     fn is_spare(&mut self, first_in_frame: usize) -> bool {
         self.rolls[first_in_frame] + self.rolls[first_in_frame+1] == 10
     }
+    
 }
 
 
@@ -96,53 +97,53 @@ mod tests {
 
     #[test]
     fn gutter_game() {
-        let mut test_context = TestContext::new();
+        let mut tc = TestContext::new();
 
-        test_context.roll_many(20, 0);
+        tc.roll_many(20, 0);
 
-        assert_eq!(0, test_context.game.score());
+        assert_eq!(0, tc.game.score());
     }
 
     #[test]
     fn all_ones() {
-        let mut test_context = TestContext::new();
+        let mut tc = TestContext::new();
  
-        test_context.roll_many(20, 1);
+        tc.roll_many(20, 1);
 
-        assert_eq!(20, test_context.game.score());
+        assert_eq!(20, tc.game.score());
     }
 
     #[test]
     fn one_spare() {
-        let mut test_context = TestContext::new();
+        let mut tc = TestContext::new();
         
-        test_context.roll_spare();
-        test_context.game.roll(3);
-        test_context.roll_many(17, 0);
+        tc.roll_spare();
+        tc.game.roll(3);
+        tc.roll_many(17, 0);
 
-        assert_eq!(16, test_context.game.score());
+        assert_eq!(16, tc.game.score());
     }
 
 
     #[test]
     fn one_strike() {
-        let mut test_context = TestContext::new();
+        let mut tc = TestContext::new();
 
-        test_context.roll_strike();
-        test_context.game.roll(3);
-        test_context.game.roll(4);
-        test_context.roll_many(16, 0);
+        tc.roll_strike();
+        tc.game.roll(3);
+        tc.game.roll(4);
+        tc.roll_many(16, 0);
 
-        assert_eq!(24, test_context.game.score());
+        assert_eq!(24, tc.game.score());
     }
 
     #[test]
     fn perfect_game() {
-        let mut test_context = TestContext::new();
+        let mut tc = TestContext::new();
 
-        test_context.roll_many(12, 10);
+        tc.roll_many(12, 10);
 
-        assert_eq!(300, test_context.game.score());
+        assert_eq!(300, tc.game.score());
     }
 
     
